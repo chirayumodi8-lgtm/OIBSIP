@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #ede9fe);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px #00000018;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3730a3;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 22px;
+        }
+
+        button:hover {
+            background: #3730a3;
+        }
+
+        #result {
+            background: #eef2ff;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        #error {
+            color: #dc2626;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌡️ Temperature Converter</h1>
+    <p style="text-align:center">Convert temperature easily</p>
+
+    <label for="temperature">Enter Temperature</label>
+    <input type="number" id="temperature" step="any"
+           placeholder="Enter a value">
+
+    <label for="unit">Select Unit</label>
+    <select id="unit">
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+        <option value="K">Kelvin (K)</option>
+    </select>
+
+    <button id="convert">Convert Temperature</button>
+
+    <div id="error" role="alert"></div>
+    <div id="result" aria-live="polite">
+        Your converted temperature will appear here.
+    </div>
+</div>
+
+<script>
+    document.getElementById("convert").addEventListener("click", function () {
+        const input = document.getElementById("temperature");
+        const unit = document.getElementById("unit").value;
+        const error = document.getElementById("error");
+        const result = document.getElementById("result");
+
+        error.textContent = "";
+        result.textContent = "";
+
+        if (input.value.trim() === "" || !Number.isFinite(Number(input.value))) {
+            error.textContent = "Please enter a valid temperature.";
+            return;
+        }
+
+        const value = Number(input.value);
+        let celsius;
+
+        if (unit === "C") {
+            celsius = value;
+        } else if (unit === "F") {
+            celsius = (value - 32) * 5 / 9;
+        } else {
+            celsius = value - 273.15;
+        }
+
+        if (celsius < -273.15) {
+            error.textContent = "Temperature cannot be below absolute zero.";
+            return;
+        }
+
+        const fahrenheit = (celsius * 9 / 5) + 32;
+        const kelvin = celsius + 273.15;
+
+        result.innerHTML =
+            "<strong>Celsius:</strong> " + celsius.toFixed(2) + " °C<br>" +
+            "<strong>Fahrenheit:</strong> " + fahrenheit.toFixed(2) + " °F<br>" +
+            "<strong>Kelvin:</strong> " + kelvin.toFixed(2) + " K";
+    });
+</script>
+
+</body>
+</html>
